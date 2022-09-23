@@ -7,6 +7,6 @@ Also you should have a branch added for yourself. You will only contribute to th
 ## Installation
 You can install Quant Physics via the git tool (a package manager).
 ```bash
-git clone https://github.com/quantphysics/quantphysics
+git clone https://github.com/quantphysics/quant_physics
 ```
 GIT will always install the latest version. Note: it will NOT handle dependencies automatically.

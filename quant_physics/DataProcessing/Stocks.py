@@ -27,20 +27,50 @@ class Stock(StockDataImporter):
         super().__init__(csv_file_path=csv_file_path, df=df)
     
     def get_opening_price(self, start_date=None, end_date=None):
+        '''
+        Inputs:
+        * start_date
+        * end_date
+        If these are not specified, it will return all available data.
+        '''
         if start_date and end_date:
             df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
         else:
             df = self.stock_df
-        return df['Open'].iloc[0]
+        return df['Open']
     
     def get_closing_price(self, start_date=None, end_date=None):
+        '''
+        Inputs:
+        * start_date
+        * end_date
+        If these are not specified, it will return all available data.
+        '''
         if start_date and end_date:
             df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
         else:
             df = self.stock_df
-        return df['Close'].iloc[-1]
+        return df['Close']
+    
+    def get_volume(self, start_date=None, end_date=None):
+        '''
+        Inputs:
+        * start_date
+        * end_date
+        If these are not specified, it will return all available data.
+        '''
+        if start_date and end_date:
+            df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
+        else:
+            df = self.stock_df
+        return df['Volume']
     
     def get_simple_moving_average(self, window, start_date=None, end_date=None):
+        '''
+        Inputs:
+        * start_date
+        * end_date
+        '''
         if start_date and end_date:
             df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
         else:
@@ -48,6 +78,11 @@ class Stock(StockDataImporter):
         return df['Close'].rolling(window=window).mean()
     
     def get_exponential_moving_average(self, window, start_date=None, end_date=None):
+        '''
+        Inputs:
+        * start_date
+        * end_date
+        '''
         if start_date and end_date:
             df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
         else:

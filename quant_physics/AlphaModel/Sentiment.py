@@ -99,7 +99,7 @@ class Twitter(SentimentAnalysis):
     def __init__(self, YOUR_CONSUMER_KEY,
                        YOUR_CONSUMER_SECRET,
                        YOUR_ACCESS_TOKEN,
-                       YOUR_ACCESS_TOKEN_SECRET,)
+                       YOUR_ACCESS_TOKEN_SECRET,):
         
         self.YOUR_CONSUMER_KEY = YOUR_CONSUMER_KEY
         self.YOUR_CONSUMER_SECRET = YOUR_CONSUMER_SECRET

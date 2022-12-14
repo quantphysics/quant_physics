@@ -106,7 +106,7 @@ class Twitter(SentimentAnalysis):
         self.YOUR_ACCESS_TOKEN = YOUR_ACCESS_TOKEN
         self.YOUR_ACCESS_TOKEN_SECRE = YOUR_ACCESS_TOKEN_SECRET
 
-        # Once Twitter is called, initalize logging into reddit
+        # Once Twitter is called, initalize logging into Twitter
 
         try:
             auth = tweepy.OAuthHandler(YOUR_CONSUMER_KEY, YOUR_CONSUMER_SECRET)

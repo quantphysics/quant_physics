@@ -1,5 +1,5 @@
-import tweepy
-import praw
+import tweepy #Twitter API
+import praw #Reddit API
 from textblob import TextBlob
 
 

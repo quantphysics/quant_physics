@@ -107,9 +107,16 @@ class Twitter(SentimentAnalysis):
         self.YOUR_ACCESS_TOKEN_SECRE = YOUR_ACCESS_TOKEN_SECRET
 
         # Once Twitter is called, initalize logging into reddit
-        auth = tweepy.OAuthHandler(YOUR_CONSUMER_KEY, YOUR_CONSUMER_SECRET)
-        auth.set_access_token(YOUR_ACCESS_TOKEN, YOUR_ACCESS_TOKEN_SECRET)
-        self.api = tweepy.API(auth)
+
+        try:
+            auth = tweepy.OAuthHandler(YOUR_CONSUMER_KEY, YOUR_CONSUMER_SECRET)
+            auth.set_access_token(YOUR_ACCESS_TOKEN, YOUR_ACCESS_TOKEN_SECRET)
+            self.api = tweepy.API(auth)
+            return 1
+        except:
+            print("Login failed, incorrect creditials")
+            return 0
+
 
     def get_twitter_sentiment(self, topic, limit):
         """

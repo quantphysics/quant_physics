@@ -23,6 +23,13 @@ class Stock(StockDataImporter):
     * csv_file_path (string) - give path to stock data
     * df (pandas DataFrame) - pre-existing pandas DataFrame containing stock data
     '''
+    
+    '''
+    Attributes
+    '''
+    strTicker = ""   # string representing stock ticker
+    strIndustry = ""  # string representing industry classification    
+    
     def __init__(self, csv_file_path=None, df=None):
         super().__init__(csv_file_path=csv_file_path, df=df)
     

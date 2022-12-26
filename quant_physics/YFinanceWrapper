@@ -1,1 +1,122 @@
+import pandas as pd
+import numpy as np
+import yfinance as yf
 
+class Portfolio:
+    '''
+    Attributes
+    '''
+    transactionArray = []  # array of Transaction objects
+    assetsSet = set([])
+    '''
+    Methods
+    '''
+
+class StockAPI:
+    def __init__(self):
+        self.base_url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials"
+        self.transactions = []
+        self.assets = {}
+
+    def export_json(self, filename):
+        # input: name of file
+        # output: write to desired file
+        with open(filename, "w") as f:
+            f.write(self.to_json())
+        return 0
+        
+    def import_json(self, filename):
+        # input: filename or path
+        # output: ???
+        with open(filename, "r") as f:
+            data = json.load(f)
+        self.from_json(data)
+        return 0
+
+    def buy(self, name, quantity):    
+        # update assetsSet
+        if name in self.assets:
+            self.assets[name] += quantity
+        else:
+            self.assets[name] = quantity
+        self.transactions.append({"type": "buy", "name": name, "quantity": quantity})
+        return 0
+
+    def sell(self, name, quantity):
+        # update assetsSet
+        if name in self.assets:
+            self.assets[name] -= quantity
+        else:
+            raise Exception("You do not own any shares of {}".format(name))
+        self.transactions.append({"type": "sell", "name": name, "quantity": quantity})
+        return 0
+
+    def stock_quantity(self, name):
+        # check if name is valid (ticker or name? or both?)
+        # loop through transaction history add up (type * quantity)
+        quantity = 0
+        for transaction in self.transactions:
+            if transaction["name"] == name:
+                if transaction["type"] == "buy":
+                    quantity += transaction["quantity"]
+                elif transaction["type"] == "sell":
+                    quantity -= transaction["quantity"]
+        return quantity
+        
+    def print_transactions(self):
+        # loops through transactionsArray and prints in desired format
+        for transaction in self.transactions:
+            print("{}: {} {} shares of {}".format(transaction["type"], transaction["quantity"], transaction["name"]))
+        return 0
+
+    def total_value(self):
+        # loop through stocks owned, stockAmount * stockPrice
+        total_value = 0
+        for name, quantity in self.assets.items():
+            price = self._get_stock_price(name)
+            total_value += price * quantity
+        return total_value
+
+    def _get_stock_price(self, ticker):
+        querystring = {"symbol": ticker}
+
+        headers = {
+            'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
+            'x-rapidapi-key': "<YOUR-API-KEY>"
+        }
+
+        response = requests.request("GET", self.base_url, headers=headers, params=querystring)
+
+        if response.status_code != 200:
+            raise Exception("Failed to retrieve stock price for {}".format(ticker))
+            return response.json()
+
+ def printTransactions():
+        # loops through transactionsArray and prints in desired format
+        return 0
+    
+    def totalValue():
+        # loop through stocks owned, stockAmount * stockPrice
+        return 0
+    
+    # Graphing methods and data visualization
+    def printEarningsVsTime():
+        # input: ticker, start date, end date, quantity graphed
+        # print changes in earnings over time, etc.
+        return 0
+
+    # nested class for transactions
+    class Transaction:
+        type = 0
+        '''
+        “purchase” = +1
+        “sell” = -1
+        Note: this will make calculations much easier, e.g. to add up total amount of a stock, just add up all values of (type * quantity) without need for if statements
+        '''
+        quantity = 0
+        time = 0  # Time you bought asset: Pandas Series .index should give date
+        price = 0
+        
+
+
+        

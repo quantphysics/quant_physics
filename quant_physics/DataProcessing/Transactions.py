@@ -1,5 +1,4 @@
 import json
-from transactions import Transaction
 
 class Transaction:
     type = 0

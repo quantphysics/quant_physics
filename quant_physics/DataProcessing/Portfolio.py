@@ -1,7 +1,6 @@
 import pandas as pd
 import json
 import matplotlib.pyplot as plt
-from transactions import Transaction
 
 class Portfolio:
     '''
@@ -45,15 +44,26 @@ class Portfolio:
         
         return portfolio
     
-    def buy(name, quantity):    
+    def buy(self,ticker, quantity):    
         # update assetsSet
+        if ticker in self.assests:
+            self.assets[ticker] += quantity
+        else:
+            self.assets[ticker] = quantity
+         self.transactions.append({"type": "buy" ,"ticker: ticker, "quantity": quantity})
+
         return 0
     
     def sell(name, quantity):
         # update assetsSet
+        if ticker in self.assets:
+             self.assets[ticker] -= quanity
+        else: 
+              raise Exception("You do not own any shares of {}".format(ticker))
+        self.transactions.append({"type": "sell", "ticker": ticker, "quantity": quantity})                        
         return 0
     
-    def stockQuantity(name):
+    def stockQuantity(self, ticker):
         # check if name is valid (ticker or name? or both?)
         # loop through transaction history add up (type * quantity)
         return 0

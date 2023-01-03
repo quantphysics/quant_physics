@@ -44,7 +44,10 @@ class Portfolio:
         portfolio.assetsSet = set(data['assetsSet'])
         
         return portfolio
-    
+    def __init__(self):
+        self.holdings = {} #dictionary to store investments and their quantities
+        self.transactions = [] # list to store transaction history
+      
     def buy(self,ticker, quantity):    
         # update assetsSet
         if ticker in self.assests:
@@ -66,8 +69,16 @@ class Portfolio:
     
     def stockQuantity(self, ticker):
         # check if name is valid (ticker or name? or both?)
-        # loop through transaction history add up (type * quantity)
-        return 0
+        # loop through transaction history add up (type * quantity)                    
+       quantity = 0
+        for transaction in self.transactions:
+            if transaction["ticker"] == ticker:
+                if transaction["type"] == "buy":
+                    quantity += transaction["quantity"]
+                elif transaction["type"] == "sell":
+                    quantity -= transaction["quantity"]
+        return quantity                            
+
         
     def printTransactions():
         # loop through the transactions and prints in desired format
@@ -75,9 +86,13 @@ class Portfolio:
             print(f'Type: {transaction.type}, Quantity: {transaction.quantity}, Time: {transaction.time}, Price: {transaction.price}')
         return 0
     
-    def totalValue():
+    def totalValue(self):
         # loop through stocks owned, stockAmount * stockPrice
-        return 0
+         totalValue = 0 
+         for ticker, quantity in self.assets.items():
+               price = self._get_stock_price(ticker)
+               toal_value += price * quantity                    
+        return totalValue
     
 # Graphing methods and data visualization
     

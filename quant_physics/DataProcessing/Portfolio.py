@@ -1,5 +1,7 @@
 import pandas as pd
 import json
+import numpy as np
+import yfinance as yf
 import matplotlib.pyplot as plt
 from transactions import Transaction
 
@@ -47,6 +49,8 @@ class Portfolio:
     def __init__(self):
         self.holdings = {} #dictionary to store investments and their quantities
         self.transactions = [] # list to store transaction history
+        self.base_url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials"
+        self.assets = {}
       
     def buy(self,ticker, quantity):    
         # update assetsSet

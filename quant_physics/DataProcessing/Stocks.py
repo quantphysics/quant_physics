@@ -1,20 +1,25 @@
 import pandas as pd
+import yfinance as yf
 
 class StockDataImporter:
     """
     Points to a stock, and then turns it into a pandas DataFrame
-
-    Input:
+    Input Options:
     * csv_file_path (string) - give path to stock data
     * df (pandas DataFrame) - pre-existing pandas DataFrame containing stock data
+    * yf_ticker (string) - ticker of the stock to retrieve data for using yfinance
     """
-    def __init__(self, csv_file_path=None, df=None):
+    def __init__(self, csv_file_path=None, df=None, yf_ticker=None):
         if csv_file_path:
             self.csv_file_path = csv_file_path
             self.stock_df = pd.read_csv(self.csv_file_path)
         elif df is not None:
             self.stock_df = df
-
+        elif yf_ticker is not None:
+            # import stock data from yfinance
+            yf_stock_data = yf.Ticker(yf_ticker).history(period="max")
+            self.stock_df = yf_stock_data
+            
 class Stock(StockDataImporter):
     '''
     Stock is a wrapper class for stock data
@@ -30,8 +35,12 @@ class Stock(StockDataImporter):
     strTicker = ""   # string representing stock ticker
     strIndustry = ""  # string representing industry classification    
     
-    def __init__(self, csv_file_path=None, df=None):
+    def __init__(self, csv_file_path=None, df=None, yf_ticker=None):
         super().__init__(csv_file_path=csv_file_path, df=df)
+        if yf_ticker:
+            self.stock_df = yf_stock_data
+        else:
+            super().__init__(csv_file_path=csv_file_path, df=df)
     
     def get_opening_price(self, start_date=None, end_date=None):
         '''

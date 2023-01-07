@@ -62,7 +62,7 @@ class Portfolio:
 
         return 0
     
-    def sell(name, quantity):
+    def sell(self,ticker, quantity):
         # update assetsSet
         if ticker in self.assets:
              self.assets[ticker] -= quanity

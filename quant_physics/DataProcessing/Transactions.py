@@ -1,14 +1,9 @@
 import json
 
 class Transaction:
-    type = 0
-    '''
-    “purchase” = +1
-    “sell” = -1
-    Note: this will make calculations much easier, e.g. to add up total amount of a stock, just add up all values of (type * quantity) without need for if statements
-    '''
+    type = ""  # "buy" or "sell"
     quantity = 0
-    time = 0  # Time you bought asset: Pandas Series .index should give date
+    time = ""  # Time you bought asset: Pandas Series .index should give date
     price = 0
 
     # create constructor so we can read in as JSON

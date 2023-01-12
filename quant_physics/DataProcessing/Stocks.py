@@ -17,8 +17,7 @@ class StockDataImporter:
             self.stock_df = df
         elif yf_ticker is not None:
             # import stock data from yfinance
-            yf_stock_data = yf.Ticker(yf_ticker).history(period="max")
-            self.stock_df = yf_stock_data
+            self.stock_df = yf.Ticker(yf_ticker).history(period="max")
             
 class Stock(StockDataImporter):
     '''
@@ -28,19 +27,11 @@ class Stock(StockDataImporter):
     * csv_file_path (string) - give path to stock data
     * df (pandas DataFrame) - pre-existing pandas DataFrame containing stock data
     '''
-    
-    '''
-    Attributes
-    '''
-    strTicker = ""   # string representing stock ticker
-    strIndustry = ""  # string representing industry classification    
-    
-    def __init__(self, csv_file_path=None, df=None, yf_ticker=None):
+    def __init__(self, csv_file_path=None, df=None, yf_ticker=None, industry=None):
         super().__init__(csv_file_path=csv_file_path, df=df)
+        self.industry = industry
         if yf_ticker:
-            self.stock_df = yf_stock_data
-        else:
-            super().__init__(csv_file_path=csv_file_path, df=df)
+            self.stock_df = yf.Ticker(yf_ticker).history(period="max")  # this might be repeating code
     
     def get_opening_price(self, start_date=None, end_date=None):
         '''

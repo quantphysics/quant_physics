@@ -3,25 +3,24 @@ import json
 import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
-from transactions import Transaction
+from Transactions import Transaction
+from Stocks import Stock
 
 class Portfolio:
-    '''
-    Attributes
-    '''
-    transactionArray = []  # array of Transaction objects
-    assetsSet = set([])
-    '''
-    Methods
-    '''
     
-    # input: filename
-    # output: writes to file
-    def exportJSON(filename):
+    def __init__(self):
+        self.transactions = [] # list to store transaction history
+        self.base_url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials"
+        self.assets = {} # dictionary to store investments and their quantities
+    
+    # parameters: string filename
+    # return: 0
+    # action: writes transactions and assets to JSON file
+    def exportJSON(self, filename):
         # store the transactions and assets in a JSON object
         json_data = json.dumps({
-            'transactionArray': self.transactionArray,
-            'assetsSet': list(self.assetsSet)
+            'transactions': self.transactions,
+            'assets': self.assets
         })
 
         # write JSON object to file
@@ -30,9 +29,10 @@ class Portfolio:
             
         return 0
     
-    # input: filename
-    # output: portfolio object
-    def importJSON(filename):
+    # parameters: string filename
+    # return: portfolio object
+    # imports Portfolio from a JSON file
+    def importJSON(self, filename):
         # read JSON data from the file
         with open(filename, 'r') as infile:
             json_data = infile.read()
@@ -42,39 +42,50 @@ class Portfolio:
         
         # create new Portfolio object with the deserialized data
         portfolio = Portfolio()
-        portfolio.transactionArray = data['transactionArray']
-        portfolio.assetsSet = set(data['assetsSet'])
+        portfolio.transactions = data['transactions']
+        portfolio.assets = data['assets']
         
         return portfolio
-    def __init__(self):
-        self.holdings = {} #dictionary to store investments and their quantities
-        self.transactions = [] # list to store transaction history
-        self.base_url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials"
-        self.assets = {}
       
+    # parameters: string ticker, int quantity
+    # return: 0
+    # action: updates transactions and assets for a purchase
     def buy(self,ticker, quantity):    
-        # update assetsSet
-        if ticker in self.assests:
+        # update assets
+        if ticker in self.assets:
             self.assets[ticker] += quantity
         else:
             self.assets[ticker] = quantity
-         self.transactions.append({"type": "buy" ,"ticker: ticker, "quantity": quantity})
+        self.transactions.append({"type": "buy" , "ticker": ticker, "quantity": quantity})
 
         return 0
     
-    def sell(self,ticker, quantity):
-        # update assetsSet
+    # parameters: string ticker, int quantity
+    # return: 0
+    # action: updates transactions and assets for a sale
+    def sell(self, ticker, quantity):
+        # check if you own any of this stock
         if ticker in self.assets:
-             self.assets[ticker] -= quanity
+             self.assets[ticker] -= quantity
         else: 
               raise Exception("You do not own any shares of {}".format(ticker))
+        
+        # update assets
         self.transactions.append({"type": "sell", "ticker": ticker, "quantity": quantity})                        
         return 0
     
+    # parameters: string ticker
+    # return: quantity of specified stock currently in portfolio
+    # counts quantity of stock purchased by viewing transaction history
     def stockQuantity(self, ticker):
-        # check if name is valid (ticker or name? or both?)
-        # loop through transaction history add up (type * quantity)                    
-       quantity = 0
+        # check if you own any of this stock
+        if ticker in self.assets:
+             self.assets[ticker] -= quantity
+        else: 
+              raise Exception("You do not own any shares of {}".format(ticker))
+        
+        # add up stock quantity using transaction history
+        quantity = 0
         for transaction in self.transactions:
             if transaction["ticker"] == ticker:
                 if transaction["type"] == "buy":
@@ -83,27 +94,32 @@ class Portfolio:
                     quantity -= transaction["quantity"]
         return quantity                            
 
-        
-    def printTransactions():
+    # parameters: N/A
+    # return: 0
+    # action: prints out transaction history (Type, Quantity, Time, Price)
+    def printTransactions(self):
         # loop through the transactions and prints in desired format
-        for transaction in self.transactionArray:
+        for transaction in self.transactions:
             print(f'Type: {transaction.type}, Quantity: {transaction.quantity}, Time: {transaction.time}, Price: {transaction.price}')
         return 0
     
+    # parameters: N/A
+    # return: total value of portfolio
     def totalValue(self):
         # loop through stocks owned, stockAmount * stockPrice
-         totalValue = 0 
-         for ticker, quantity in self.assets.items():
+        totalValue = 0 
+        for ticker, quantity in self.assets.items():
                price = self._get_stock_price(ticker)
                toal_value += price * quantity                    
         return totalValue
     
 # Graphing methods and data visualization
     
-    # input: stock ticker, start and end date, and quantity
-    # output: earnings vs time graph for that stock
+    # parameters: string ticker, string start_date, string end_date, int quantity
+        # Note: Dates should be in the format of "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"
+    # return: 0
+    # action: prints earnings vs time graph for that stock
     def stockEarningsVsTime(self, ticker, start_date, end_date, quantity):
-        # input: ticker, start date, end date, quantity graphed
         # print changes in earnings over time, etc.
         
         # get stock data
@@ -124,8 +140,47 @@ class Portfolio:
         
         return 0
     
-    # input: start and end date
-    # output: graph of entire portfolio earnings vs time
+    # parameters: start and end date
+    # return: graph of entire portfolio earnings vs time
     def portfolioEarningsVsTime(self, start_date, end_date):
         # TODO: Define totalValue() as a function of start and end date, default start and end date is entire period of buying/selling
         return 0
+
+
+
+
+
+
+
+
+
+# # testing
+
+# portfolio = Portfolio()
+
+# # Create a new stock object using yfinance
+# stock1 = Stock(yf_ticker='AAPL')
+
+# # Purchase 100 shares of the stock
+# portfolio.buy('AAPL', 100)
+
+# # Check the current value of the portfolio
+# print(portfolio.totalValue())
+
+# # Sell 50 shares of the stock
+# portfolio.sell('AAPL', 50)
+
+# # Check the current value of the portfolio
+# print(portfolio.totalValue())
+
+# # print the transactions
+# portfolio.printTransactions()
+
+# # Get the stock's opening price for the last 5 days
+# print(stock1.get_opening_price(start_date= '2021-08-01', end_date= '2021-08-05'))
+
+# # Get the stock's closing price for the last 5 days
+# print(stock1.get_closing_price(start_date= '2021-08-01', end_date= '2021-08-05'))
+
+# # Get the stock's volume for the last 5 days
+# print(stock1.get_volume(start_date= '2021-08-01', end_date= '2021-08-05'))

@@ -5,13 +5,16 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 from Transactions import Transaction
 from Stocks import Stock
+from Transactions import Transaction
+from Stocks import Stock
 
 class Portfolio:
     
     def __init__(self):
         self.transactions = [] # list to store transaction history
         self.base_url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials"
-        self.assets = {} # dictionary to store investments and their quantities
+        self.assets = {} # dictionary to store Stock object and quantity
+        self.balance = 0  # current total value of portfolio
     
     # parameters: string filename
     # return: 0
@@ -50,28 +53,43 @@ class Portfolio:
     # parameters: string ticker, int quantity
     # return: 0
     # action: updates transactions and assets for a purchase
-    def buy(self,ticker, quantity):    
+    # parameters: string ticker, int quantity, purchase time
+    # return: 0
+    # action: updates transactions and assets for a purchase
+    def buy(self,ticker, quantity, purchase_time):    
         # update assets
         if ticker in self.assets:
-            self.assets[ticker] += quantity
+            self.assets[stock] += quantity
         else:
-            self.assets[ticker] = quantity
-        self.transactions.append({"type": "buy" , "ticker": ticker, "quantity": quantity})
-
+            stock = Stock(yf_ticker = ticker)  # create Stock object with this ticker
+            self.assets[stock] = quantity
+        price = stock.get_price(transaction_date=purchase_time) # buy based on opening price
+        self.transactions.append({"type": "buy" , "ticker": ticker, "quantity": quantity, 
+                                  "price": price, "time": purchase_time})
+        balance += price * quantity
         return 0
     
     # parameters: string ticker, int quantity
     # return: 0
     # action: updates transactions and assets for a sale
-    def sell(self, ticker, quantity):
+    def sell(self, ticker, quantity, purchase_time):
         # check if you own any of this stock
-        if ticker in self.assets:
-             self.assets[ticker] -= quantity
-        else: 
-              raise Exception("You do not own any shares of {}".format(ticker))
         
+        
+        # UNFUCK THIS LATER
+        if ticker in self.assets:
+            if self.assets[stock] >= quantity:
+                self.assets[stock] -= quantity
+            else:
+                raise Exception("You only own " self.assets[stock] " of {}".format(ticker))
+        else: 
+            raise Exception("You do not own any shares of {}".format(ticker))
+        
+        price = stock.get_price(transaction_date=purchase_time) # buy based on opening price
+
         # update assets
-        self.transactions.append({"type": "sell", "ticker": ticker, "quantity": quantity})                        
+        self.transactions.append({"type": "sell" , "ticker": ticker, "quantity": quantity, 
+                                  "price": price, "time": purchase_time})
         return 0
     
     # parameters: string ticker
@@ -154,33 +172,33 @@ class Portfolio:
 
 
 
-# # testing
+# testing
 
-# portfolio = Portfolio()
+portfolio = Portfolio()
 
-# # Create a new stock object using yfinance
-# stock1 = Stock(yf_ticker='AAPL')
+# Create a new stock object using yfinance
+stock1 = Stock(yf_ticker='AAPL')
 
-# # Purchase 100 shares of the stock
-# portfolio.buy('AAPL', 100)
+# Purchase 100 shares of the stock
+portfolio.buy('AAPL', 100)
 
-# # Check the current value of the portfolio
-# print(portfolio.totalValue())
+# Check the current value of the portfolio
+print(portfolio.totalValue())
 
-# # Sell 50 shares of the stock
-# portfolio.sell('AAPL', 50)
+# Sell 50 shares of the stock
+portfolio.sell('AAPL', 50)
 
-# # Check the current value of the portfolio
-# print(portfolio.totalValue())
+# Check the current value of the portfolio
+print(portfolio.totalValue())
 
-# # print the transactions
-# portfolio.printTransactions()
+# print the transactions
+portfolio.printTransactions()
 
-# # Get the stock's opening price for the last 5 days
-# print(stock1.get_opening_price(start_date= '2021-08-01', end_date= '2021-08-05'))
+# Get the stock's opening price for the last 5 days
+print(stock1.get_opening_price(start_date= '2021-08-01', end_date= '2021-08-05'))
 
-# # Get the stock's closing price for the last 5 days
-# print(stock1.get_closing_price(start_date= '2021-08-01', end_date= '2021-08-05'))
+# Get the stock's closing price for the last 5 days
+print(stock1.get_closing_price(start_date= '2021-08-01', end_date= '2021-08-05'))
 
-# # Get the stock's volume for the last 5 days
-# print(stock1.get_volume(start_date= '2021-08-01', end_date= '2021-08-05'))
+# Get the stock's volume for the last 5 days
+print(stock1.get_volume(start_date= '2021-08-01', end_date= '2021-08-05'))

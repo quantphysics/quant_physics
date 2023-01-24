@@ -31,9 +31,10 @@ class Stock(StockDataImporter):
         super().__init__(csv_file_path=csv_file_path, df=df)
         self.industry = industry
         if yf_ticker:
-            self.stock_df = yf.Ticker(yf_ticker).history(period="max")  # this might be repeating code
+            self.yf_ticker = yf_ticker  # set yf_ticker in this Stock object
+            self.stock_df = yf.Ticker(yf_ticker).history(period="max")  # set stock dataframe in this Stock object
     
-    def get_opening_price(self, start_date=None, end_date=None):
+    def get_price(self, type=None, start_date=None, end_date=None, transaction_date=None):
         '''
         Inputs:
         * start_date
@@ -42,22 +43,18 @@ class Stock(StockDataImporter):
         '''
         if start_date and end_date:
             df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
+        elif transaction_date:
+            df = self.stock_df[(self.stock_df['Date'] == transaction_date)]
         else:
             df = self.stock_df
-        return df['Open']
-    
-    def get_closing_price(self, start_date=None, end_date=None):
-        '''
-        Inputs:
-        * start_date
-        * end_date
-        If these are not specified, it will return all available data.
-        '''
-        if start_date and end_date:
-            df = self.stock_df[(self.stock_df['Date'] >= start_date) & (self.stock_df['Date'] <= end_date)]
+            
+        if type == "open":
+            return df['Open']
+        elif type == "close":
+            return df['Close']
         else:
-            df = self.stock_df
-        return df['Close']
+            # print("Uses Closing Price")
+            return df['Close']
     
     def get_volume(self, start_date=None, end_date=None):
         '''

@@ -1,9 +1,11 @@
 import tweepy #Twitter API
 import praw #Reddit API
 import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
+import pandas as pd
+import re
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
 from textblob import TextBlob
 
 

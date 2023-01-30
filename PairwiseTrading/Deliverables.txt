@@ -1,0 +1,3 @@
+Feb 6 - Working code to find cointegration and correlation for a hardcoded list of stocks (basically recreate past github)
+Feb 13 - Working on code to find cointegration across novel stocks (out of industries or in different exchanges)
+Feb 20 - Create predictive model based on company metadata other than price to predict correlated or cointegrated and use to test at a faster rate

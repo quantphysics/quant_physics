@@ -15,7 +15,7 @@ class StockDataImporter:
         elif df is not None:
             self.stock_df = df
 
-class Stock(StockDataImporter):
+class Stock:
     '''
     Stock is a wrapper class for stock data
     
@@ -24,7 +24,7 @@ class Stock(StockDataImporter):
     * df (pandas DataFrame) - pre-existing pandas DataFrame containing stock data
     '''
     def __init__(self, csv_file_path=None, df=None):
-        super().__init__(csv_file_path=csv_file_path, df=df)
+        pass
     
     def get_opening_price(self, start_date=None, end_date=None):
         '''

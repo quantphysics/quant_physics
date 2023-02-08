@@ -1,3 +1,8 @@
 Feb 8 - Working code to find cointegration and correlation for a hardcoded list of stocks (basically recreate past github)
 Feb 15 - Working on code to find cointegration across novel stocks (out of industries or in different exchanges)
+
+Task 1: Retrieve stocks by industry, and generate a table of stock A, stock B, and for the time being the ratio of company A's employee size to company B's employee size (use pytickersymbols).
+Task 2: Given arrays of cointegration and correlation, iterate through and make a pandas table with each pair having its own entry with columns of stock A, stock B, correlation, cointegration.
+    Once the pandas table is stored, generate a csv and load the csv, verifying no info is changed.
+
 Feb 22 - Create predictive model based on company metadata other than price to predict correlated or cointegrated and use to test at a faster rate
